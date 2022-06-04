@@ -1,0 +1,113 @@
+@use "variabili";
+@use "pixelToRem";
+@use "sass:math";
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 1rem;
+}
+
+$font-sizes: (
+  "1rem": 1rem,
+  "2rem": 2rem,
+  "3rem": 3rem,
+);
+
+@each $key, $value in $font-sizes {
+  .fs-#{$key} {
+    font-size: $value;
+  }
+}
+
+@mixin col-bor-font($color, $color-border, $font) {
+  color: $color;
+  border: pixelToRem.convertToRem(1) solid $color-border;
+  font-size: $font;
+}
+
+%extension {
+  line-height: 1.6;
+  margin: 1rem 0;
+  color: variabili.$color-ternary;
+  border-bottom: pixelToRem.convertToRem(2) solid variabili.$color-secondary;
+}
+
+.wrapper {
+  margin: 0.5rem;
+  padding: variabili.$padding-unit;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  border: pixelToRem.convertToRem(1) solid variabili.$color-primary;
+  h1 {
+    @extend %extension;
+  }
+
+  h2 {
+    @extend %extension;
+    padding: 1rem;
+    border: pixelToRem.convertToRem(1) solid variabili.$color-primary;
+  }
+  section {
+    display: flex;
+    width: 100%;
+    p {
+      padding: 2 * variabili.$padding-unit variabili.$padding-unit;
+      text-align: center;
+    }
+    &:last-child {
+      article {
+        @include col-bor-font(
+          variabili.$color-ternary,
+          variabili.$color-secondary,
+          pixelToRem.convertToRem(24)
+        );
+        margin-top: variabili.$padding-unit;
+        flex-grow: 1;
+      }
+    }
+    &:nth-last-child(2) {
+      margin-top: variabili.$padding-unit;
+      align-items: center;
+      justify-content: space-between;
+      div {
+        border: pixelToRem.convertToRem(1) solid variabili.$color-primary;
+        width: pixelToRem.convertToRem(45);
+        height: pixelToRem.convertToRem(45);
+        @for $i from 1 through 19 {
+          &:nth-child(#{$i}) {
+            @if $i == 10 {
+              background-color: variabili.$color-secondary;
+              color: variabili.$color-primary;
+            } @else {
+              background-color: darken(#fff, calc(5 * $i));
+              color: lighten(black, calc(5 * $i));
+            }
+          }
+        }
+      }
+    }
+  }
+
+  article {
+    &:nth-child(odd) {
+      @include col-bor-font(
+        variabili.$color-secondary,
+        variabili.$color-ternary,
+        1rem
+      );
+    }
+    &:nth-child(even) {
+      @include col-bor-font(
+        variabili.$color-primary,
+        variabili.$color-ternary,
+        1rem
+      );
+    }
+  }
+}
